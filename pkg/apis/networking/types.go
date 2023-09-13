@@ -712,11 +712,6 @@ type IPAddressList struct {
 	Items []IPAddress
 }
 
-// +genclient
-// +genclient:nonNamespaced
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-// +k8s:prerelease-lifecycle-gen:introduced=1.27
-
 // PodNetwork represents a logical network in the K8s Cluster.
 // This logical network depends on the host networking setup on cluster nodes.
 type PodNetwork struct {
@@ -780,6 +775,9 @@ const (
 	// Kubernetes uses a built-in mechanism to configure IPAM.
 	// Based on KCM IPAM controller and ClusterCIDR.
 	Kubernetes IPAMType = "kubernetes"
+	// None option is used when no IP will be present and
+	// reported on the attachment to this PodNetwork.
+	NoneType IPAMType = "none"
 )
 
 // ParametersRef defines a custom resource containing additional parameters for the
@@ -844,13 +842,15 @@ type PodNetworkStatus struct {
 	//
 	// * "Ready"
 	// * "ParamsReady"
+	// * "InUse"
 	//
 	// +optional
 	// +patchMergeKey=type
 	// +patchStrategy=merge
 	// +listType=map
 	// +listMapKey=type
-	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
+	// +kubebuilder:validation:MaxItems=5
+	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,req,name=conditions"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -867,4 +867,58 @@ type PodNetworkList struct {
 
 	// items is the list of PodNetworks.
 	Items []PodNetwork `json:"items" protobuf:"bytes,2,rep,name=items"`
+}
+
+// PodNetworkAttachment provides optional pod-level configuration of PodNetwork.
+type PodNetworkAttachment struct {
+	metav1.TypeMeta `json:",inline"`
+	// Standard object's metadata.
+	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+	// +optional
+	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
+	// Spec defines the behavior of a PodNetworkAttachment.
+	// https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+	// +optional
+	Spec PodNetworkAttachmentSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+
+	// Most recently observed status of the PodNetworkAttachment.
+	// Populated by the system.
+	// Read-only.
+	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+	// +optional
+	Status PodNetworkAttachmentStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+}
+
+// PodNetworkAttachmentSpec is the specification for the PodNetworkAttachment resource.
+type PodNetworkAttachmentSpec struct {
+	// PodNetworkName refers to a PodNetwork object that this PodNetworkAttachment is
+	// connected to.
+	// +required
+	PodNetworkName string `json:"podNetworkName" protobuf:"bytes,1,req,name=podNetworkName"`
+
+	// ParametersRefs points to the vendor or implementation specific parameters
+	// object for the PodNetworkAttachment.
+	// +optional
+	ParametersRefs *ParametersRef `json:"parametersRefs,omitempty" protobuf:"bytes,2,opt,name=parametersRefs"`
+}
+
+// PodNetworkAttachmentStatus is the status for the PodNetworkAttachment resource.
+type PodNetworkAttachmentStatus struct {
+	// Conditions describe the current conditions of the PodNetworkAttachment.
+	//
+	//
+	// Known condition types are:
+	//
+	// * "Ready"
+	// * "ParamsReady"
+	// * "InUse"
+	//
+	// +optional
+	// +patchMergeKey=type
+	// +patchStrategy=merge
+	// +listType=map
+	// +listMapKey=type
+	// +kubebuilder:validation:MaxItems=5
+	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,req,name=conditions"`
 }

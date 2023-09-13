@@ -1301,8 +1301,16 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationsnetworkingv1alpha1.IPAddressApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("IPAddressSpec"):
 		return &applyconfigurationsnetworkingv1alpha1.IPAddressSpecApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("ParametersRef"):
+		return &applyconfigurationsnetworkingv1alpha1.ParametersRefApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("ParentReference"):
 		return &applyconfigurationsnetworkingv1alpha1.ParentReferenceApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("PodNetwork"):
+		return &applyconfigurationsnetworkingv1alpha1.PodNetworkApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("PodNetworkSpec"):
+		return &applyconfigurationsnetworkingv1alpha1.PodNetworkSpecApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("PodNetworkStatus"):
+		return &applyconfigurationsnetworkingv1alpha1.PodNetworkStatusApplyConfiguration{}
 
 		// Group=networking.k8s.io, Version=v1beta1
 	case networkingv1beta1.SchemeGroupVersion.WithKind("HTTPIngressPath"):

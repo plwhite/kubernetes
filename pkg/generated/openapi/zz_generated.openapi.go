@@ -744,7 +744,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/api/networking/v1alpha1.IPAddress":                                                              schema_k8sio_api_networking_v1alpha1_IPAddress(ref),
 		"k8s.io/api/networking/v1alpha1.IPAddressList":                                                          schema_k8sio_api_networking_v1alpha1_IPAddressList(ref),
 		"k8s.io/api/networking/v1alpha1.IPAddressSpec":                                                          schema_k8sio_api_networking_v1alpha1_IPAddressSpec(ref),
+		"k8s.io/api/networking/v1alpha1.ParametersRef":                                                          schema_k8sio_api_networking_v1alpha1_ParametersRef(ref),
 		"k8s.io/api/networking/v1alpha1.ParentReference":                                                        schema_k8sio_api_networking_v1alpha1_ParentReference(ref),
+		"k8s.io/api/networking/v1alpha1.PodNetwork":                                                             schema_k8sio_api_networking_v1alpha1_PodNetwork(ref),
+		"k8s.io/api/networking/v1alpha1.PodNetworkList":                                                         schema_k8sio_api_networking_v1alpha1_PodNetworkList(ref),
+		"k8s.io/api/networking/v1alpha1.PodNetworkSpec":                                                         schema_k8sio_api_networking_v1alpha1_PodNetworkSpec(ref),
+		"k8s.io/api/networking/v1alpha1.PodNetworkStatus":                                                       schema_k8sio_api_networking_v1alpha1_PodNetworkStatus(ref),
 		"k8s.io/api/networking/v1beta1.HTTPIngressPath":                                                         schema_k8sio_api_networking_v1beta1_HTTPIngressPath(ref),
 		"k8s.io/api/networking/v1beta1.HTTPIngressRuleValue":                                                    schema_k8sio_api_networking_v1beta1_HTTPIngressRuleValue(ref),
 		"k8s.io/api/networking/v1beta1.Ingress":                                                                 schema_k8sio_api_networking_v1beta1_Ingress(ref),
@@ -37383,6 +37388,51 @@ func schema_k8sio_api_networking_v1alpha1_IPAddressSpec(ref common.ReferenceCall
 	}
 }
 
+func schema_k8sio_api_networking_v1alpha1_ParametersRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ParametersRef defines a custom resource containing additional parameters for PodNetwork.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"group": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Group is the group of the object being referenced.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is the resource of the object being referenced.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace is the namespace of the object being referenced.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the object being referenced.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"group", "kind", "name"},
+			},
+		},
+	}
+}
+
 func schema_k8sio_api_networking_v1alpha1_ParentReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -37428,6 +37478,190 @@ func schema_k8sio_api_networking_v1alpha1_ParentReference(ref common.ReferenceCa
 				},
 			},
 		},
+	}
+}
+
+func schema_k8sio_api_networking_v1alpha1_PodNetwork(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodNetwork represents a logical network in the K8s Cluster. This logical network depends on the host networking setup on cluster nodes.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Spec defines the behavior of a PodNetwork. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/networking/v1alpha1.PodNetworkSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Most recently observed status of the PodNetwork. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/networking/v1alpha1.PodNetworkStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/networking/v1alpha1.PodNetworkSpec", "k8s.io/api/networking/v1alpha1.PodNetworkStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_k8sio_api_networking_v1alpha1_PodNetworkList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodNetworkList contains a list of PodNetwork.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "items is the list of PodNetworks.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/networking/v1alpha1.PodNetwork"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/networking/v1alpha1.PodNetwork", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_k8sio_api_networking_v1alpha1_PodNetworkSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodNetworkSpec contains the specifications for podNetwork object",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"ipam4": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IPAM4 defines what is handling v4 IPAM for Pods attaching to this PodNetwork. When specified, an IPv4 address is required for the attachment. When not specified, no IPv4 is expected to be present and reported on the attachment to this PodNetwork.\n\n\nPossible enum values:\n - `\"external\"` uses external mechanisms to define IPAM configuration.\n - `\"kubernetes\"` uses a built-in mechanism to configure IPAM. Based on KCM IPAM controller and ClusterCIDR.",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"external", "kubernetes"},
+						},
+					},
+					"ipam6": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IPAM6 defines what is handling v6 IPAM for Pods attaching to this PodNetwork. When specified, an IPv6 address is required for the attachment. When not specified, no IPv6 is expected to be present and reported on the attachment to this PodNetwork.\n\n\nPossible enum values:\n - `\"external\"` uses external mechanisms to define IPAM configuration.\n - `\"kubernetes\"` uses a built-in mechanism to configure IPAM. Based on KCM IPAM controller and ClusterCIDR.",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"external", "kubernetes"},
+						},
+					},
+					"parametersRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ParametersRef points to the vendor or implementation specific params for the podNetwork.",
+							Ref:         ref("k8s.io/api/networking/v1alpha1.ParametersRef"),
+						},
+					},
+					"provider": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Provider specifies the provider implementing this PodNetwork.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/networking/v1alpha1.ParametersRef"},
+	}
+}
+
+func schema_k8sio_api_networking_v1alpha1_PodNetworkStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodNetworkStatus contains the status information related to the PodNetwork.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"type",
+								},
+								"x-kubernetes-list-type":       "map",
+								"x-kubernetes-patch-merge-key": "type",
+								"x-kubernetes-patch-strategy":  "merge",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions describe the current state of the PodNetwork.\n\nKnown condition types are:\n\n* \"Ready\" * \"ParamsReady\"",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Condition"},
 	}
 }
 

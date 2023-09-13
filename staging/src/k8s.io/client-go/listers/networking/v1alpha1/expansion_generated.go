@@ -25,3 +25,7 @@ type ClusterCIDRListerExpansion interface{}
 // IPAddressListerExpansion allows custom methods to be added to
 // IPAddressLister.
 type IPAddressListerExpansion interface{}
+
+// PodNetworkListerExpansion allows custom methods to be added to
+// PodNetworkLister.
+type PodNetworkListerExpansion interface{}

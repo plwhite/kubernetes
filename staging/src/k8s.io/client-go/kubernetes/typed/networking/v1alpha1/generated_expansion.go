@@ -21,3 +21,5 @@ package v1alpha1
 type ClusterCIDRExpansion interface{}
 
 type IPAddressExpansion interface{}
+
+type PodNetworkExpansion interface{}

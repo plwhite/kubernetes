@@ -28,6 +28,8 @@ type Interface interface {
 	ClusterCIDRs() ClusterCIDRInformer
 	// IPAddresses returns a IPAddressInformer.
 	IPAddresses() IPAddressInformer
+	// PodNetworks returns a PodNetworkInformer.
+	PodNetworks() PodNetworkInformer
 }
 
 type version struct {
@@ -49,4 +51,9 @@ func (v *version) ClusterCIDRs() ClusterCIDRInformer {
 // IPAddresses returns a IPAddressInformer.
 func (v *version) IPAddresses() IPAddressInformer {
 	return &iPAddressInformer{factory: v.factory, tweakListOptions: v.tweakListOptions}
+}
+
+// PodNetworks returns a PodNetworkInformer.
+func (v *version) PodNetworks() PodNetworkInformer {
+	return &podNetworkInformer{factory: v.factory, tweakListOptions: v.tweakListOptions}
 }
