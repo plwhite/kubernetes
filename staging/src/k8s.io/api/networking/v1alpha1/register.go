@@ -56,6 +56,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ClusterCIDRList{},
 		&IPAddress{},
 		&IPAddressList{},
+		&PodNetwork{},
+		&PodNetworkList{},
+		&PodNetworkAttachment{},
+		&PodNetworkAttachmentList{},
 	)
 	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
 	return nil
