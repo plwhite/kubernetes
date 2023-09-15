@@ -357,10 +357,10 @@ type PodNetworkAttachmentSpec struct {
 	// +required
 	PodNetworkName string `json:"podNetworkName" protobuf:"bytes,1,req,name=podNetworkName"`
 
-	// ParametersRefs points to the vendor or implementation specific parameters
+	// ParametersRef points to the vendor or implementation specific parameters
 	// object for the PodNetworkAttachment.
 	// +optional
-	ParametersRefs *ParametersRef `json:"parametersRefs,omitempty" protobuf:"bytes,2,opt,name=parametersRefs"`
+	ParametersRef *ParametersRef `json:"parametersRef,omitempty" protobuf:"bytes,2,opt,name=parametersRef"`
 }
 
 // PodNetworkAttachmentStatus is the status for the PodNetworkAttachment resource.
