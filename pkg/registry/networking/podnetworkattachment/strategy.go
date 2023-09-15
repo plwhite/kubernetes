@@ -38,7 +38,7 @@ var Strategy = podNetworkAttachmentStrategy{legacyscheme.Scheme, names.SimpleNam
 
 // NamespaceScoped returns false because all podNetworkAttachments do not need to be within a namespace.
 func (podNetworkAttachmentStrategy) NamespaceScoped() bool {
-	return false
+	return true
 }
 
 func (podNetworkAttachmentStrategy) PrepareForCreate(ctx context.Context, obj runtime.Object) {}
