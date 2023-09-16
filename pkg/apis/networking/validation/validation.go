@@ -844,7 +844,7 @@ var ValidatePodNetworkAttachmentName = apimachineryvalidation.NameIsDNSLabel
 
 // ValidatePodNetworkAttachment validates a PodNetworkAttachment.
 func ValidatePodNetworkAttachment(pn *networking.PodNetworkAttachment) field.ErrorList {
-	allErrs := apivalidation.ValidateObjectMeta(&pn.ObjectMeta, false, ValidatePodNetworkName, field.NewPath("metadata"))
+	allErrs := apivalidation.ValidateObjectMeta(&pn.ObjectMeta, true, ValidatePodNetworkName, field.NewPath("metadata"))
 	return allErrs
 }
 
