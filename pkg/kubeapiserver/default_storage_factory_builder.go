@@ -73,6 +73,8 @@ func NewStorageFactoryConfig() *StorageFactoryConfig {
 		admissionregistration.Resource("validatingadmissionpolicybindings").WithVersion("v1beta1"),
 		networking.Resource("clustercidrs").WithVersion("v1alpha1"),
 		networking.Resource("ipaddresses").WithVersion("v1alpha1"),
+		networking.Resource("podnetworks").WithVersion("v1alpha1"),
+		networking.Resource("podnetworkattachments").WithVersion("v1alpha1"),
 		certificates.Resource("clustertrustbundles").WithVersion("v1alpha1"),
 	}
 

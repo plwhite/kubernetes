@@ -830,7 +830,7 @@ func ValidatePodNetworkUpdate(update, old *networking.PodNetwork) field.ErrorLis
 func validatePodNetworkUpdateSpec(update, old *networking.PodNetworkSpec, fldPath *field.Path) field.ErrorList {
 	var allErrs field.ErrorList
 
-	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.ParametersRef, old.ParametersRef, fldPath.Child("parametersRef"))...)
+	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.ParametersRefs, old.ParametersRefs, fldPath.Child("parametersRefs"))...)
 	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.IPAM4, old.IPAM4, fldPath.Child("ipam4"))...)
 	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.IPAM6, old.IPAM6, fldPath.Child("ipam6"))...)
 	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.Provider, old.Provider, fldPath.Child("provider"))...)
@@ -859,7 +859,7 @@ func ValidatePodNetworkAttachmentUpdate(update, old *networking.PodNetworkAttach
 func validatePodNetworkAttachmentUpdateSpec(update, old *networking.PodNetworkAttachmentSpec, fldPath *field.Path) field.ErrorList {
 	var allErrs field.ErrorList
 
-	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.ParametersRef, old.ParametersRef, fldPath.Child("parametersRef"))...)
+	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.ParametersRefs, old.ParametersRefs, fldPath.Child("parametersRefs"))...)
 	allErrs = append(allErrs, apivalidation.ValidateImmutableField(update.PodNetworkName, old.PodNetworkName, fldPath.Child("podNetworkName"))...)
 
 	return allErrs
