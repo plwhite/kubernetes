@@ -162,8 +162,6 @@ type IPAddressList struct {
 	Items []IPAddress `json:"items" protobuf:"bytes,2,rep,name=items"`
 }
 
-// +genclient
-// +genclient:nonNamespaced
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +k8s:prerelease-lifecycle-gen:introduced=1.27
 
@@ -213,7 +211,7 @@ type PodNetworkSpec struct {
 	// ParametersRef points to the vendor or implementation specific params for the
 	// podNetwork.
 	// +optional
-	ParametersRef *ParametersRef `json:"parametersRef,omitempty" protobuf:"bytes,3,opt,name=parametersRef"`
+	ParametersRefs []ParametersRef `json:"parametersRefs,omitempty" protobuf:"bytes,3,opt,name=parametersRefs"`
 
 	// Provider specifies the provider implementing this PodNetwork.
 	// +optional
@@ -325,7 +323,6 @@ type PodNetworkList struct {
 }
 
 // +genclient
-// +genclient:nonNamespaced
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +k8s:prerelease-lifecycle-gen:introduced=1.27
 
@@ -357,10 +354,10 @@ type PodNetworkAttachmentSpec struct {
 	// +required
 	PodNetworkName string `json:"podNetworkName" protobuf:"bytes,1,req,name=podNetworkName"`
 
-	// ParametersRef points to the vendor or implementation specific parameters
+	// ParametersRefs points to the vendor or implementation specific parameters
 	// object for the PodNetworkAttachment.
 	// +optional
-	ParametersRef *ParametersRef `json:"parametersRef,omitempty" protobuf:"bytes,2,opt,name=parametersRef"`
+	ParametersRefs []ParametersRef `json:"parametersRefs,omitempty" protobuf:"bytes,2,opt,name=parametersRefs"`
 }
 
 // PodNetworkAttachmentStatus is the status for the PodNetworkAttachment resource.

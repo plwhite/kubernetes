@@ -97,6 +97,7 @@ func AddHandlers(h printers.PrintHandler) {
 		{Name: "Node", Type: "string", Priority: 1, Description: apiv1.PodSpec{}.SwaggerDoc()["nodeName"]},
 		{Name: "Nominated Node", Type: "string", Priority: 1, Description: apiv1.PodStatus{}.SwaggerDoc()["nominatedNodeName"]},
 		{Name: "Readiness Gates", Type: "string", Priority: 1, Description: apiv1.PodSpec{}.SwaggerDoc()["readinessGates"]},
+		{Name: "Networks", Type: "string", Description: "The names of the networks that the pod belongs to."},
 	}
 
 	// Errors are suppressed as TableHandler already logs internally
@@ -661,6 +662,24 @@ func AddHandlers(h printers.PrintHandler) {
 
 	h.TableHandler(ipAddressColumnDefinitions, printIPAddress)
 	h.TableHandler(ipAddressColumnDefinitions, printIPAddressList)
+
+	podNetworkColumnDefinitions := []metav1.TableColumnDefinition{
+		{Name: "Name", Type: "string", Format: "name", Description: metav1.ObjectMeta{}.SwaggerDoc()["name"]},
+		{Name: "IPAM4", Type: "string", Description: networkingv1alpha1.PodNetworkSpec{}.SwaggerDoc()["ipam4"]},
+		{Name: "IPAM6", Type: "string", Description: networkingv1alpha1.PodNetworkSpec{}.SwaggerDoc()["ipam6"]},
+		{Name: "Provider", Type: "string", Description: networkingv1alpha1.PodNetworkSpec{}.SwaggerDoc()["provider"]},
+	}
+
+	h.TableHandler(podNetworkColumnDefinitions, printPodNetwork)
+	h.TableHandler(podNetworkColumnDefinitions, printPodNetworkList)
+
+	podNetworkAttachmentColumnDefinitions := []metav1.TableColumnDefinition{
+		{Name: "Name", Type: "string", Format: "name", Description: metav1.ObjectMeta{}.SwaggerDoc()["name"]},
+		{Name: "IPAM4", Type: "string", Description: networkingv1alpha1.PodNetworkAttachmentSpec{}.SwaggerDoc()["podNetworkName"]},
+	}
+
+	h.TableHandler(podNetworkAttachmentColumnDefinitions, printPodNetworkAttachment)
+	h.TableHandler(podNetworkAttachmentColumnDefinitions, printPodNetworkAttachmentList)
 }
 
 // Pass ports=nil for all ports.
@@ -988,7 +1007,14 @@ func printPod(pod *api.Pod, options printers.GenerateOptions) ([]metav1.TableRow
 			}
 			readinessGates = fmt.Sprintf("%d/%d", trueConditions, len(pod.Spec.ReadinessGates))
 		}
-		row.Cells = append(row.Cells, podIP, nodeName, nominatedNodeName, readinessGates)
+		networks := "<none>"
+		if len(pod.Spec.Networks) > 0 {
+			// loop through all networks and append them to the networks string
+			for i := range pod.Spec.Networks {
+				networks += pod.Spec.Networks[i].PodNetworkName + ", "
+			}
+		}
+		row.Cells = append(row.Cells, podIP, nodeName, nominatedNodeName, readinessGates, networks)
 	}
 
 	return []metav1.TableRow{row}, nil
@@ -2878,6 +2904,64 @@ func printIPAddressList(list *networking.IPAddressList, options printers.Generat
 	rows := make([]metav1.TableRow, 0, len(list.Items))
 	for i := range list.Items {
 		r, err := printIPAddress(&list.Items[i], options)
+		if err != nil {
+			return nil, err
+		}
+		rows = append(rows, r...)
+	}
+	return rows, nil
+}
+
+func printPodNetwork(obj *networking.PodNetwork, options printers.GenerateOptions) ([]metav1.TableRow, error) {
+	row := metav1.TableRow{
+		Object: runtime.RawExtension{Object: obj},
+	}
+
+	ipam4 := "<none>"
+	ipam6 := "<none>"
+	provider := "<none>"
+
+	if obj.Spec.IPAM4 != nil {
+		ipam4 = string(*obj.Spec.IPAM4)
+	}
+	if obj.Spec.IPAM6 != nil {
+		ipam6 = string(*obj.Spec.IPAM6)
+	}
+	if obj.Spec.Provider != "" {
+		provider = obj.Spec.Provider
+	}
+
+	row.Cells = append(row.Cells, obj.Name, ipam4, ipam6, provider)
+
+	return []metav1.TableRow{row}, nil
+}
+
+func printPodNetworkList(list *networking.PodNetworkList, options printers.GenerateOptions) ([]metav1.TableRow, error) {
+	rows := make([]metav1.TableRow, 0, len(list.Items))
+	for i := range list.Items {
+		r, err := printPodNetwork(&list.Items[i], options)
+		if err != nil {
+			return nil, err
+		}
+		rows = append(rows, r...)
+	}
+	return rows, nil
+}
+
+func printPodNetworkAttachment(obj *networking.PodNetworkAttachment, options printers.GenerateOptions) ([]metav1.TableRow, error) {
+	row := metav1.TableRow{
+		Object: runtime.RawExtension{Object: obj},
+	}
+
+	row.Cells = append(row.Cells, obj.Name, obj.Spec.PodNetworkName)
+
+	return []metav1.TableRow{row}, nil
+}
+
+func printPodNetworkAttachmentList(list *networking.PodNetworkAttachmentList, options printers.GenerateOptions) ([]metav1.TableRow, error) {
+	rows := make([]metav1.TableRow, 0, len(list.Items))
+	for i := range list.Items {
+		r, err := printPodNetworkAttachment(&list.Items[i], options)
 		if err != nil {
 			return nil, err
 		}
