@@ -5681,6 +5681,24 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: phase
       type:
         scalar: string
+- name: io.k8s.api.core.v1.Network
+  map:
+    fields:
+    - name: interfaceName
+      type:
+        scalar: string
+    - name: isDefaultGW4
+      type:
+        scalar: boolean
+    - name: isDefaultGW6
+      type:
+        scalar: boolean
+    - name: podNetworkAttachmentName
+      type:
+        scalar: string
+    - name: podNetworkName
+      type:
+        scalar: string
 - name: io.k8s.api.core.v1.Node
   map:
     fields:
@@ -6401,9 +6419,16 @@ var schemaYAML = typed.YAMLObject(`types:
 - name: io.k8s.api.core.v1.PodIP
   map:
     fields:
+    - name: interfaceName
+      type:
+        scalar: string
     - name: ip
       type:
         scalar: string
+    - name: podNetwork
+      type:
+        scalar: string
+      default: ""
 - name: io.k8s.api.core.v1.PodOS
   map:
     fields:
@@ -6561,6 +6586,12 @@ var schemaYAML = typed.YAMLObject(`types:
           elementRelationship: associative
           keys:
           - name
+    - name: networks
+      type:
+        list:
+          elementType:
+            namedType: io.k8s.api.core.v1.Network
+          elementRelationship: atomic
     - name: nodeName
       type:
         scalar: string
@@ -10310,6 +10341,24 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: parentRef
       type:
         namedType: io.k8s.api.networking.v1alpha1.ParentReference
+- name: io.k8s.api.networking.v1alpha1.ParametersRef
+  map:
+    fields:
+    - name: group
+      type:
+        scalar: string
+      default: ""
+    - name: kind
+      type:
+        scalar: string
+      default: ""
+    - name: name
+      type:
+        scalar: string
+      default: ""
+    - name: namespace
+      type:
+        scalar: string
 - name: io.k8s.api.networking.v1alpha1.ParentReference
   map:
     fields:
@@ -10328,6 +10377,101 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: uid
       type:
         scalar: string
+- name: io.k8s.api.networking.v1alpha1.PodNetwork
+  map:
+    fields:
+    - name: apiVersion
+      type:
+        scalar: string
+    - name: kind
+      type:
+        scalar: string
+    - name: metadata
+      type:
+        namedType: io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta
+      default: {}
+    - name: spec
+      type:
+        namedType: io.k8s.api.networking.v1alpha1.PodNetworkSpec
+      default: {}
+    - name: status
+      type:
+        namedType: io.k8s.api.networking.v1alpha1.PodNetworkStatus
+      default: {}
+- name: io.k8s.api.networking.v1alpha1.PodNetworkAttachment
+  map:
+    fields:
+    - name: apiVersion
+      type:
+        scalar: string
+    - name: kind
+      type:
+        scalar: string
+    - name: metadata
+      type:
+        namedType: io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta
+      default: {}
+    - name: spec
+      type:
+        namedType: io.k8s.api.networking.v1alpha1.PodNetworkAttachmentSpec
+      default: {}
+    - name: status
+      type:
+        namedType: io.k8s.api.networking.v1alpha1.PodNetworkAttachmentStatus
+      default: {}
+- name: io.k8s.api.networking.v1alpha1.PodNetworkAttachmentSpec
+  map:
+    fields:
+    - name: parametersRefs
+      type:
+        list:
+          elementType:
+            namedType: io.k8s.api.networking.v1alpha1.ParametersRef
+          elementRelationship: atomic
+    - name: podNetworkName
+      type:
+        scalar: string
+      default: ""
+- name: io.k8s.api.networking.v1alpha1.PodNetworkAttachmentStatus
+  map:
+    fields:
+    - name: conditions
+      type:
+        list:
+          elementType:
+            namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Condition
+          elementRelationship: associative
+          keys:
+          - type
+- name: io.k8s.api.networking.v1alpha1.PodNetworkSpec
+  map:
+    fields:
+    - name: ipam4
+      type:
+        scalar: string
+    - name: ipam6
+      type:
+        scalar: string
+    - name: parametersRefs
+      type:
+        list:
+          elementType:
+            namedType: io.k8s.api.networking.v1alpha1.ParametersRef
+          elementRelationship: atomic
+    - name: provider
+      type:
+        scalar: string
+- name: io.k8s.api.networking.v1alpha1.PodNetworkStatus
+  map:
+    fields:
+    - name: conditions
+      type:
+        list:
+          elementType:
+            namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Condition
+          elementRelationship: associative
+          keys:
+          - type
 - name: io.k8s.api.networking.v1beta1.HTTPIngressPath
   map:
     fields:

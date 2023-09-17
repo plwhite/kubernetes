@@ -293,6 +293,10 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().ClusterCIDRs().Informer()}, nil
 	case networkingv1alpha1.SchemeGroupVersion.WithResource("ipaddresses"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().IPAddresses().Informer()}, nil
+	case networkingv1alpha1.SchemeGroupVersion.WithResource("podnetworks"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().PodNetworks().Informer()}, nil
+	case networkingv1alpha1.SchemeGroupVersion.WithResource("podnetworkattachments"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().PodNetworkAttachments().Informer()}, nil
 
 		// Group=networking.k8s.io, Version=v1beta1
 	case networkingv1beta1.SchemeGroupVersion.WithResource("ingresses"):

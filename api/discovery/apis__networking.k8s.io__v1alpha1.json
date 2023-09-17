@@ -42,6 +42,46 @@
         "update",
         "watch"
       ]
+    },
+    {
+      "kind": "PodNetworkAttachment",
+      "name": "podnetworkattachments",
+      "namespaced": true,
+      "shortNames": [
+        "pna"
+      ],
+      "singularName": "podnetworkattachment",
+      "storageVersionHash": "05fYfwnPTrQ=",
+      "verbs": [
+        "create",
+        "delete",
+        "deletecollection",
+        "get",
+        "list",
+        "patch",
+        "update",
+        "watch"
+      ]
+    },
+    {
+      "kind": "PodNetwork",
+      "name": "podnetworks",
+      "namespaced": false,
+      "shortNames": [
+        "pn"
+      ],
+      "singularName": "podnetwork",
+      "storageVersionHash": "XQwlj1wGiY0=",
+      "verbs": [
+        "create",
+        "delete",
+        "deletecollection",
+        "get",
+        "list",
+        "patch",
+        "update",
+        "watch"
+      ]
     }
   ]
 }
