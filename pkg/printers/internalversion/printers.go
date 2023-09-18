@@ -675,7 +675,7 @@ func AddHandlers(h printers.PrintHandler) {
 
 	podNetworkAttachmentColumnDefinitions := []metav1.TableColumnDefinition{
 		{Name: "Name", Type: "string", Format: "name", Description: metav1.ObjectMeta{}.SwaggerDoc()["name"]},
-		{Name: "IPAM4", Type: "string", Description: networkingv1alpha1.PodNetworkAttachmentSpec{}.SwaggerDoc()["podNetworkName"]},
+		{Name: "Network", Type: "string", Description: networkingv1alpha1.PodNetworkAttachmentSpec{}.SwaggerDoc()["podNetworkName"]},
 	}
 
 	h.TableHandler(podNetworkAttachmentColumnDefinitions, printPodNetworkAttachment)
