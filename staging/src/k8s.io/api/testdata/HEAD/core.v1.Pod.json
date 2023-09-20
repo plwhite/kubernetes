@@ -1619,6 +1619,15 @@
           "resourceClaimTemplateName": "resourceClaimTemplateNameValue"
         }
       }
+    ],
+    "networks": [
+      {
+        "podNetworkName": "podNetworkNameValue",
+        "podNetworkAttachmentName": "podNetworkAttachmentNameValue",
+        "interfaceName": "interfaceNameValue",
+        "isDefaultGW4": true,
+        "isDefaultGW6": true
+      }
     ]
   },
   "status": {
@@ -1645,7 +1654,9 @@
     "podIP": "podIPValue",
     "podIPs": [
       {
-        "ip": "ipValue"
+        "ip": "ipValue",
+        "podNetwork": "podNetworkValue",
+        "interfaceName": "interfaceNameValue"
       }
     ],
     "startTime": "2007-01-01T01:01:01Z",

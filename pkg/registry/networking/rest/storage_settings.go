@@ -30,6 +30,8 @@ import (
 	ingressclassstore "k8s.io/kubernetes/pkg/registry/networking/ingressclass/storage"
 	ipaddressstore "k8s.io/kubernetes/pkg/registry/networking/ipaddress/storage"
 	networkpolicystore "k8s.io/kubernetes/pkg/registry/networking/networkpolicy/storage"
+	podnetworkstore "k8s.io/kubernetes/pkg/registry/networking/podnetwork/storage"
+	podnetworkattachmentstore "k8s.io/kubernetes/pkg/registry/networking/podnetworkattachment/storage"
 )
 
 type RESTStorageProvider struct{}
@@ -107,6 +109,25 @@ func (p RESTStorageProvider) v1alpha1Storage(apiResourceConfigSource serverstora
 		}
 		storage[resource] = ipAddressStorage
 	}
+
+	// podnetworks
+	if resource := "podnetworks"; apiResourceConfigSource.ResourceEnabled(networkingapiv1alpha1.SchemeGroupVersion.WithResource(resource)) {
+		podNetworkStore, err := podnetworkstore.NewREST(restOptionsGetter)
+		if err != nil {
+			return storage, err
+		}
+		storage[resource] = podNetworkStore
+	}
+
+	// podnetworkattachments
+	if resource := "podnetworkattachments"; apiResourceConfigSource.ResourceEnabled(networkingapiv1alpha1.SchemeGroupVersion.WithResource(resource)) {
+		podNetworkAttachmentStore, err := podnetworkattachmentstore.NewREST(restOptionsGetter)
+		if err != nil {
+			return storage, err
+		}
+		storage[resource] = podNetworkAttachmentStore
+	}
+
 	return storage, nil
 }
 

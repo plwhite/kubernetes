@@ -898,6 +898,52 @@
                 "update",
                 "watch"
               ]
+            },
+            {
+              "resource": "podnetworkattachments",
+              "responseKind": {
+                "group": "",
+                "kind": "PodNetworkAttachment",
+                "version": ""
+              },
+              "scope": "Namespaced",
+              "shortNames": [
+                "pna"
+              ],
+              "singularResource": "podnetworkattachment",
+              "verbs": [
+                "create",
+                "delete",
+                "deletecollection",
+                "get",
+                "list",
+                "patch",
+                "update",
+                "watch"
+              ]
+            },
+            {
+              "resource": "podnetworks",
+              "responseKind": {
+                "group": "",
+                "kind": "PodNetwork",
+                "version": ""
+              },
+              "scope": "Cluster",
+              "shortNames": [
+                "pn"
+              ],
+              "singularResource": "podnetwork",
+              "verbs": [
+                "create",
+                "delete",
+                "deletecollection",
+                "get",
+                "list",
+                "patch",
+                "update",
+                "watch"
+              ]
             }
           ],
           "version": "v1alpha1"

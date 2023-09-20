@@ -36,6 +36,14 @@ func (c *FakeNetworkingV1alpha1) IPAddresses() v1alpha1.IPAddressInterface {
 	return &FakeIPAddresses{c}
 }
 
+func (c *FakeNetworkingV1alpha1) PodNetworks() v1alpha1.PodNetworkInterface {
+	return &FakePodNetworks{c}
+}
+
+func (c *FakeNetworkingV1alpha1) PodNetworkAttachments(namespace string) v1alpha1.PodNetworkAttachmentInterface {
+	return &FakePodNetworkAttachments{c, namespace}
+}
+
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeNetworkingV1alpha1) RESTClient() rest.Interface {
